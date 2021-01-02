@@ -73,7 +73,7 @@ int main(int argc , char const *argv[]) {
             genererNumeroDossier(tampon);
 
             // on envoie le no de dossier au client
-            send(fdSocketCommunication, tampon, strlen(tampon), 0);
+            send(fdSocketCommunication, buffer, 100, 0);
 
             exit(EXIT_SUCCESS);
         }
