@@ -32,7 +32,7 @@ int main(int argc , char const *argv[]) {
     fdSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     if (fdSocket < 0) {
-        printf("socket incorrecte\n");
+        printf("socket incorrecte\n"); 
         exit(EXIT_FAILURE);
     }
 
