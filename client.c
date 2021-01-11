@@ -9,15 +9,16 @@
 #include <unistd.h>
 #include "header.h"
 
-//#define MAX_TICKET 100
-
-/*typedef struct t Ticket;
+#define MAX_TICKET 100
+/*
+typedef struct t Ticket;
 
 struct Ticket{
-    char idTicket[20];//char au lieu de int car fprintf attend comme argument un char*
+    char idTicket[0];//char au lieu de int car fprintf attend comme argument un char*
     char nom[100];
     char prenom[100];
-} t;*/
+} t;
+*/
 
 #define PORT 6000
 #define MAX_BUFFER 1000
@@ -63,7 +64,7 @@ int main(int argc , char const *argv[]) {
 
 //corps des fonctions
 
-/*void ajouterTicket(){
+void ajouterTicket(){
     //ouverture ou creation du fichier
     FILE* fichier=NULL;
     fichier=fopen("tickets.txt","a");//a =droits en écriture à partir de la fin du fichier, cree le fichier s'il n'existe pas
@@ -78,9 +79,6 @@ int main(int argc , char const *argv[]) {
         scanf("%s",t1.idTicket);
         char buff[1000];
 
-        //la partie en commentaire ne marche pas
-
-
         int fdSocket;
         int nbRecu;
         char tampon[MAX_BUFFER];
@@ -91,6 +89,7 @@ int main(int argc , char const *argv[]) {
             printf("Voici le no de dossier : %s\n", tampon);
         }
 
+        //recuperer no de dossier du serveur et l'affecter a t1.idTicket
 
         printf("Saisir le nom:\n");
         scanf("%s",t1.nom);
@@ -102,7 +101,7 @@ int main(int argc , char const *argv[]) {
         fprintf(fichier, "nom: %s ", t1.nom);
         fprintf(fichier, "prenom: %s \n", t1.prenom);
 
-        if (t1.idTicket != fread(buff,3,1,fichier)) {
+        if (t1.idTicket != fread(buff,3,1,fichier)) {//warning: comparison between pointer and integer
           //ajout des informations du ticket dans le fichier txt
           fprintf(fichier,"id: %s ", t1.idTicket);//a modifier
           fprintf(fichier, "nom: %s ", t1.nom);
@@ -115,7 +114,7 @@ int main(int argc , char const *argv[]) {
 
         fclose(fichier);
 
-        printf("Pour revenir à l'accueil, tapez 1.\nPour quitter l'application, appuyer sur une touche du clavier.\n");
+        printf("Pour revenir à l'accueil, tapez 1.\n");
         scanf("%d", &choix);
         if(choix==1){
             printf("\nRetour à l'accueil.\n");
@@ -128,9 +127,9 @@ int main(int argc , char const *argv[]) {
     else{
         printf("impossible d'ouvrir le fichier");
     }
-}*/
+}
 
-/*void afficherListeTickets(){
+void afficherListeTickets(){
     FILE* fichier=NULL;
     fichier=fopen("tickets.txt","r");//r=lecture seule
 
@@ -171,21 +170,22 @@ void annulerReservation() {
     printf("Veuillez saisir votre nom: \n");
     scanf("%s\n", t1.nom);
   }
-}*/
+  //a finir
+}
 
-/*void menuClient(){
+void menuClient(){
     int choix=0, choix2=0;
     printf("Bienvenue dans l'application de gestion des places de concert.\nQue voulez vous faire?\n1: consulter la liste des billets vendus\t 2: acheter un billet.\t 3: quitter l'application\n");
     scanf("%d", &choix);
 
     if(choix==1){
-        printf("Vous avez choisi d'afficher la liste des billets vendus. Pour revenir à l'accueil, tapez 1.\n Pour quitter l'application, appuyer sur une touche du clavier.\n");
-      //  afficherListeTickets();
+        printf("Vous avez choisi d'afficher la liste des billets vendus. Pour revenir à l'accueil, tapez 1.\n");
+        afficherListeTickets();
     }
 
     else if(choix==2){
         printf("Vous avez choisi d'acheter un billet.\n");
-      //  ajouterTicket();
+        ajouterTicket();
     }
 
     else if(choix==3){
@@ -194,7 +194,7 @@ void annulerReservation() {
     }
 
     else if(choix==4){
-      printf("Vous avez choisi d'annuler une réservation. Pour revenir à l'acceuil , tapez 1.\n Pour quitter l'application, appuyer sur une touche du clavier.\n");
+      printf("Vous avez choisi d'annuler une réservation. Pour revenir à l'accueil , tapez 1.\n");
     //  annulerReservation();
     }
 
@@ -202,4 +202,4 @@ void annulerReservation() {
         printf("\nChoix invalide, vous allez être redirigé vers l'accueil.\n");
         menuClient();
     }
-}*/
+}

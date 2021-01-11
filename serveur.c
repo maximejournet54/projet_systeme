@@ -14,14 +14,15 @@
 #define MAX_BUFFER 1000
 #define MAX_CLIENTS 100
 #define MAX_TICKET 100
-
+/*
 typedef struct t Ticket;
 
 struct Ticket{
-    char idTicket[20];//char au lieu de int car fprintf attend comme argument un char*
+    char idTicket[10];//char au lieu de int car fprintf attend comme argument un char*
     char nom[100];
     char prenom[100];
 } t;
+*/
 
 const char *EXIT = "exit";
 
@@ -74,17 +75,6 @@ int main(int argc , char const *argv[]) {
 
         printf("Client connecté - %s:%d\n",inet_ntoa(coordonneesAppelant.sin_addr),ntohs(coordonneesAppelant.sin_port));
 
-        //la partie en commentaire ne marche pas
-        /*
-        if ((pid = fork()) == 0) {
-            close(fdSocketAttente);
-            genererNumeroDossier(tampon);
-            // on envoie le no de dossier au client
-            send(fdSocketCommunication, buffer, 100, 0);
-            exit(EXIT_SUCCESS);
-        }
-        */
-
         nbClients++;
     }
 
@@ -99,147 +89,7 @@ void genererNumeroDossier(char buffer[]){
     long max=9999999999, min=1000000000;
     srand(time(NULL));//initialisation de la graine
     long no=(rand() % (max-min+1)) +min;//genere un nombre pseudo-aléatoire de 10 chiffres
-    snprintf(buffer, MAX_BUFFER, "%lld", no);//pb de format
-}
-
-void ajouterTicket(){
-    //ouverture ou creation du fichier
-    FILE* fichier=NULL;
-    fichier=fopen("tickets.txt","a");//a =droits en écriture à partir de la fin du fichier, cree le fichier s'il n'existe pas
-    struct Ticket t1;
-
-    int choix=0;
-
-    if(fichier != NULL){
-        //le no de ticket doit etre genere par le serveur => void genererNumeroDossier()
-
-        printf("Saisir un numéro de ticket a 10 chiffres:\n");
-        scanf("%s",t1.idTicket);
-        char buff[1000];
-
-        //la partie en commentaire ne marche pas
-
-        /*
-        int fdSocket;
-        int nbRecu;
-        char tampon[MAX_BUFFER];
-        // on attend la réponse du serveur
-        nbRecu = recv(fdSocket, tampon, MAX_BUFFER, 0);
-        if (nbRecu > 0) {
-            tampon[nbRecu] = 0;
-            printf("Voici le no de dossier : %s\n", tampon);
-        }
-        */
-
-        printf("Saisir le nom:\n");
-        scanf("%s",t1.nom);
-
-        printf("Saisir le prénom:\n ");
-        scanf("%s",t1.prenom);
-
-        fprintf(fichier,"id: %s ", t1.idTicket);//a modifier
-        fprintf(fichier, "nom: %s ", t1.nom);
-        fprintf(fichier, "prenom: %s \n", t1.prenom);
-
-        /*if (t1.idTicket != fread(buff,3,1,fichier)) {
-          //ajout des informations du ticket dans le fichier txt
-          fprintf(fichier,"id: %s ", t1.idTicket);//a modifier
-          fprintf(fichier, "nom: %s ", t1.nom);
-          fprintf(fichier, "prenom: %s \n", t1.prenom);
-        }else{
-          printf("\nCe numéro de place est déjà attribué\n");
-          printf("\nRetour à l'accueil\n");
-          menuClient();
-        }*/
-
-        fclose(fichier);
-
-        printf("Pour revenir à l'accueil, tapez 1.\nPour quitter l'application, appuyer sur une touche du clavier.\n");
-        scanf("%d", &choix);
-        if(choix==1){
-            printf("\nRetour à l'accueil.\n");
-            menuClient();
-        }else{
-            exit(1);
-        }
-
-    }
-    else{
-        printf("impossible d'ouvrir le fichier");
-    }
-}
-
-void afficherListeTickets(){
-    FILE* fichier=NULL;
-    fichier=fopen("tickets.txt","r");//r=lecture seule
-
-    int choix=0;
-
-    char str[1000];//1000=nb max de caracteres du fichier
-
-    if(fichier != NULL){
-        while(fgets(str,1000,fichier)!=NULL){
-            printf("%s", str);
-        }
-    }
-    else{
-        printf("impossible d'ouvrir le fichier");
-    }
-
-    fclose(fichier);
-
-    printf("\n");
-    scanf("%d", &choix);
-    if(choix==1){
-        printf("\nRetour à l'accueil.\n");
-        menuClient();
-    }else{
-        exit(1);
-    }
-
-}
-
-void annulerReservation() {
-  FILE* fichier=NULL;
-  fichier=fopen("tickets.txt","a");
-  struct Ticket t1;
-
-  int choix=0;
-
-  if (fichier != NULL) {
-    printf("Veuillez saisir votre nom: \n");
-    scanf("%s\n", t1.nom);
-  }
+    snprintf(buffer, MAX_BUFFER, "%lld", no);//pb de format: format ‘%lld’ expects argument of type ‘long long int’, but argument 4 has type ‘long int’
 }
 
 
-void menuClient(){
-    int choix=0, choix2=0;
-    printf("Bienvenue dans l'application de gestion des places de concert.\nQue voulez vous faire?\n1: consulter la liste des billets vendus\t 2: acheter un billet.\t 3: quitter l'application\n");
-    scanf("%d", &choix);
-
-    if(choix==1){
-        printf("Vous avez choisi d'afficher la liste des billets vendus. Pour revenir à l'accueil, tapez 1.\n Pour quitter l'application, appuyer sur une touche du clavier.\n");
-      //  afficherListeTickets();
-    }
-
-    else if(choix==2){
-        printf("Vous avez choisi d'acheter un billet.\n");
-      //  ajouterTicket();
-    }
-
-    else if(choix==3){
-        printf("Vous avez choisi de quitter l'application.\n");
-        exit(1);
-    }
-
-    else if(choix==4){
-      printf("Vous avez choisi d'annuler une réservation. Pour revenir à l'acceuil , tapez 1.\n Pour quitter l'application, appuyer sur une touche du clavier.\n");
-    //  annulerReservation();
-    }
-
-    else{
-        printf("\nChoix invalide, vous allez être redirigé vers l'accueil.\n");
-        menuClient();
-    }
-}
