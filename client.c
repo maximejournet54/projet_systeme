@@ -160,23 +160,90 @@ void afficherListeTickets(){
 
 }
 
-void annulerReservation() {
+/*void annulerReservation() {
 FILE* fichier=NULL;
-fichier=fopen("tickets.txt","a");
+FILE* fichiertemp=NULL;
+char temp[] = "fichiertemp.txt";
+char nouveaunom[] = "tickets.txt";
+fichiertemp=fopen(temp, "w");
+fichier=fopen("tickets.txt","r");
 struct Ticket t1;
+char str[1000];
+int noL = 0;
+int idTicket;
 
 int choix=0;
 
 if (fichier != NULL) {
-  printf("Veuillez saisir votre nom: \n");
-  scanf("%s\n", t1.nom);
+  printf("Veuillez saisir votre id de ticket: \n");
+  scanf("%s\n", idTicket);
+  printf("bonjour\n");
+  while (fgets(str,1000,fichier)!=NULL) {
+    if (idTicket != fgets(str,1000,fichier)) { //modif ça
+      printf("Ce ticket existe, suppression en cours\n");
+      while (!feof(fichier)) {
+        strcpy(str, "\0");
+        fgets(str, 1000, fichier);
+        if (!feof(fichier)) {
+          noL++;
+          if (idTicket != strstr(fichier, idTicket)) {
+            fprintf(temp, "%s", str);
+          }
+        }
+      }
+    }
+  }
 }
-//a finir
+fclose(fichier);
+fclose(temp);
+remove("tickets.txt");
+rename(temp, nouveaunom);
+}*/
+
+void annulerReservation() {
+FILE* fichier=NULL;
+FILE* fichiertemp=NULL;
+//char temp[] = "fichiertemp.txt";
+fichiertemp=fopen("fichiertemp.txt", "w");
+fichier=fopen("tickets.txt","a");
+struct Ticket t1;
+char str[1000];
+int noL = 0;
+int noT;
+
+int choix=0;
+
+if (fichier != NULL) {
+  printf("Numéro du ticket à supprimer : ");
+      scanf("%d", &noT);
+	noT++;
+      // copier le fichier dans le fichier temporaire sauf la ligne correspondant au ticket à supprimer
+      while (!feof(fichier))
+      {
+          strcpy(str, "\0");
+          fgets(str, 1000, fichier);
+          if (!feof(fichier))
+          {
+              noL++;
+              /* sauter la ligne contenant le n° rentré */
+             if (noT != noL)
+              {
+                  fprintf(fichiertemp, "%s", str);//pb ici refuse de copier le texte dans l'autre fichier
+              }
+          }
+      }
+      fclose(fichier);
+      fclose(fichiertemp);
+      remove("tickets.txt");  		// supprimer le fichier de base
+    rename("fichiertemp.txt", "tickets.txt"); 	// renomer le fichier temporaire
 }
+exit(1);
+}
+
 
 void menuClient(){
   int choix=0, choix2=0;
-  printf("Bienvenue dans l'application de gestion des places de concert.\nQue voulez vous faire?\n1: consulter la liste des billets vendus\t 2: acheter un billet.\t 3: quitter l'application\n");
+  printf("Bienvenue dans l'application de gestion des places de concert.\nQue voulez vous faire?\n1: consulter la liste des billets vendus\t 2: acheter un billet.\t 3: quitter l'application\t 4: Annuler une réservation\n");
   scanf("%d", &choix);
 
   if(choix==1){
@@ -196,7 +263,7 @@ void menuClient(){
 
   else if(choix==4){
     printf("Vous avez choisi d'annuler une réservation. Pour revenir à l'accueil , tapez 1.\n");
-  //  annulerReservation();
+    annulerReservation();
   }
 
   else{
