@@ -243,7 +243,7 @@ exit(1);
 
 void menuClient(){
   int choix=0, choix2=0;
-  printf("Bienvenue dans l'application de gestion des places de concert.\nQue voulez vous faire?\n1: consulter la liste des billets vendus\t 2: acheter un billet.\t 3: quitter l'application\t 4: Annuler une réservation\n");
+  printf("Bienvenue dans l'application de gestion des places de concert.\nQue voulez vous faire?\n1: consulter la liste des billets vendus\t 2: acheter un billet.\t 3: quitter l'application\t 4: Annuler une réservation.\n");
   scanf("%d", &choix);
 
   if(choix==1){
